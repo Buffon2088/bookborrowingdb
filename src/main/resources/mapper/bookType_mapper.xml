@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bookborrowingdb.dao.BookTypeDao">
+    <resultMap id="bookTypeResultMap" type="bookborrowingdb.pojo.BookTypeInfo">
+        <id column="bookType_id" property="bookTypeId"/>
+        <result column="bookType_name" property="bookTypeName"/>
+        <result column="bookType_state" property="bookTypeState"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="bookTypeResultMap" resultType="java.util.List">
+        select * from bookType_info
+    </select>
+
+    <select id="findBookType" resultMap="bookTypeResultMap">
+        select * from bookType_info where bookType_id=#{bookTypeId}
+    </select>
+
+    <update id="updateBookType">
+        update bookType_info
+       <trim prefix="set" suffixOverrides=",">
+           <if test="bookTypeName!=null">bookType_name=#{bookTypeName},</if>
+           <if test="bookTYpeState!=null">bookType_state=#{bookTypeState}</if>
+       </trim>
+       where bookType_id=#{bookTypeId}
+    </update>
+
+    <update id="deletebookType">
+        delete from bookType_info where bookType_id=#{bookTypeId}
+    </update>
+
+    <insert id="addBookType">
+        insert into bookType_info values (null,#{bookTypeName},#{boolTypeState})
+    </insert>
+</mapper>
