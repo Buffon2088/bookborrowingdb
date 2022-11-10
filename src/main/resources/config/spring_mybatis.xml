@@ -20,7 +20,7 @@
         <!--加载数据库连接池，获取数据库链接，读取数据表缓存-->
         <property name="dataSource" ref="dataSource"/>
         <!--加载充满sql的mapper文件-->
-        <!--<property name="mapperLocations" value="classpath:mapper/*.xml" />-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml" />
     </bean>
     <!--扫描对应dao的接口-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

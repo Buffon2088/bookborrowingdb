@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bookborrowingdb.dao.UserTypeDao">
+    <resultMap id="userTypeResultMap" type="bookborrowingdb.pojo.UserTypeInfo">
+        <id column="userType_id" property="userTypeId"/>
+        <result column="userType_name" property="userTypeName"/>
+        <result column="user_maxNum" property="userMacNum"/>
+        <result column="user_maxTime" property="userMaxTime"/>
+        <result column="userType_state" property="userTypeState"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="userTypeResultMap" resultType="java.util.List">
+        select * from userType_info
+    </select>
+
+    <select id="findUserType" resultMap="userTypeResultMap">
+        select * from userType_info
+        <where>
+            <if test="userTypeId!=0">userType_id=#{userTypeId}</if>
+        </where>
+    </select>
+
+    <insert id="addUserType">
+        insert into userType_info values (null,#{userTypeName},#{userMaxNum},#{userMaxTime},#{userTypeState})
+    </insert>
+
+    <delete id="deleteUserType">
+        delete from userType_info where userType_id=#{userTypeId}
+    </delete>
+
+    <update id="updateUserType">
+        update userType_info
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userTypeName!=null">userType_name=#{userTypeName},</if>
+            <if test="userMaxNum!=0">user_maxNum=#{userMaxNum},</if>
+            <if test="userMaxTime!=0">user_maxTime=#{userMaxTime},</if>
+            <if test="userTypeState!=null">userType_state=#{userTypeState}</if>
+        </trim>
+    </update>
+</mapper>

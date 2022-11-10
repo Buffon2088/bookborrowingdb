@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bookborrowingdb.dao.AdminDao">
+    <resultMap id="adminResultMap" type="bookborrowingdb.pojo.AdminInfo">
+        <id column="admin_id" property="adminId"/>
+        <result column="admin_name" property="adminName"/>
+        <result column="admin_loginName" property="adminLoginName"/>
+        <result column="admin_loginPwd" property="adminLoginPwd"/>
+        <result column="admin_img" property="adminImg"/>
+        <result column="admin_key" property="adminKey"/>
+        <result column="admin_tel" property="adminTel"/>
+        <result column="admin_email" property="adminEmail"/>
+        <result column="admin_state" property="adminState"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="adminResultMap" resultType="java.util.List">
+        select * from admin_info
+    </select>
+
+    <select id="findAdmin" resultMap="adminResultMap">
+        select * from admin_info
+        <where>
+            <if test="adminId!=0">admin_id=#{adminId}</if>
+            <if test="adminLoginName!=null">and admin_loginName=#{adminLoginName}</if>
+            <if test="adminLoginPwd!=null">and admin_loginPwd=#{adminLoginPwd}</if>
+        </where>
+    </select>
+
+    <delete id="deleteAdmin">
+        delete from admin_info where admin_id = #{adminId}
+    </delete>
+
+    <insert id="addAdmin">
+        insert into admin_info values (null,#{adminName},#{adminLoginName},#{adminLoginPwd},#{adminState},#{adminImg},#{adminEmail},#{adminKey})
+    </insert>
+
+    <update id="updateAdmin">
+        update admin_info
+        <trim prefix="set" suffixOverrides=",">
+            <if test="adminName!=null">admin_name=#{adminName},</if>
+            <if test="adminLoginName!=null">admin_loginName=#{adminLoginName},</if>
+            <if test="adminLoginPwd!=null">admin_loginPwd=#{adminLoginPwd},</if>
+            <if test="adminState!=null">admin_state=#{adminState},</if>
+            <if test="adminImg!=null">admin_img=#{adminImg},</if>
+            <if test="adminEmail!=null">admin_email=#{adminEmail},</if>
+            <if test="adminKey!=null">admin_key=#{adminKey}</if>
+        </trim>
+        where admin_id=#{adminId}
+    </update>
+</mapper>

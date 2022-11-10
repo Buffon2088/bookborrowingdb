@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bookborrowingdb.dao.UserDao">
+    <resultMap id="userResultMap" type="bookborrowingdb.pojo.UserInfo">
+        <id column="user_id" property="userId"/>
+        <result column="user_loginName" property="userLoginName"/>
+        <result column="user_loginPwd" property="userLoginPwd"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_img" property="userImg"/>
+        <result column="user_gold" property="userGold"/>
+        <result column="user_time" property="userTime"/>
+        <result column="user_tel" property="userTel"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_state" property="userState"/>
+        <result column="user_key" property="userKey"/>
+
+        <association column="userType_id" property="userTypeInfo" jdbcType="INTEGER" javaType="bookborrowingdb.pojo.UserTypeInfo">
+            <id column="userType_id" property="userTypeId"/>
+            <result column="userType_name" property="userTypeName"/>
+            <result column="user_maxNum" property="userMacNum"/>
+            <result column="user_maxTime" property="userMaxTime"/>
+            <result column="userType_state" property="userTypeState"/>
+        </association>
+    </resultMap>
+
+    <select id="findAll" resultMap="userResultMap" resultType="java.util.List">
+        select * from user_info u left join userType_info ut on u.userType_id=ut.userType_id
+    </select>
+
+    <select id="findUser" resultMap="userResultMap">
+        select * from user_info u left join userType_info ut on u.userType_id=ut.userType_id
+        <where>
+            <if test="userId!=0">user_id=#{userId}</if>
+            <if test="userLoginName!=null">and user_loginName=#{userLoginNmae}</if>
+            <if test="userLoginPwd!=null">and user_loginPwd=#{userLoginPwd}</if>
+            <if test="userTypeInfo!=null">and userType_id=#{userTypeId}</if>
+        </where>
+    </select>
+
+    <insert id="addUser">
+        insert into user_info values (null,#{userLoginName},#{userLoginPwd},#{userName},#{userImg},#{userGold},#{userTime},#{userTel},#{userTypeInfo.userTypeId},#{userEmail},#{userState},#{userKey})
+    </insert>
+
+    <delete id="deleteUser">
+        delete from user_info where user_id=#{userId}
+    </delete>
+
+    <update id="updateUser">
+        update user_info
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userLoginName!=null">user_loginName=#{userLoginName},</if>
+            <if test="userLoginPwd!=null">user_loginPwd=#{userLoginPwd},</if>
+            <if test="userName!=null">user_name=#{userName},</if>
+            <if test="userImg!=null">user_img=#{userImg},</if>
+            <if test="userGold!=0">user_gold=#{userGold},</if>
+            <if test="userTime!=0">user_time=#{userTime},</if>
+            <if test="userTel!=null">user_tel=#{userTel},</if>
+            <if test="userTypeInfo!=null">userType_id=#{userTypeId},</if>
+            <if test="userEmail!=null">user_email=#{userEmail]},</if>
+            <if test="userState!=null">user_state=#{userState},</if>
+            <if test="userKey!=null">user_key=#{userKey}</if>
+        </trim>
+        where user_id=#{userId}
+    </update>
+</mapper>
